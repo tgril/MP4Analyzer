@@ -3,10 +3,12 @@
 
 	downloader.setCallback(
 		function (response) {
-			console.log(response);
 			console.log(getDate() + "Successfully loaded file " + url);
+
+			this.parser = new Parser(response);
 		}
 	);
+
 	downloader.setUrl(url);
 	downloader.download();
 }

@@ -1,7 +1,6 @@
 ﻿function Downloader() {
 }
 
-
 Downloader.prototype.setUrl = function (url) {
     this.url = url;
 }
@@ -21,9 +20,8 @@ Downloader.prototype.download = function () {
 
     req.onreadystatechange = function (e) {
         if ((req.status == 200 || req.status == 304) && req.readyState == this.DONE) {
-            var buffer = req.response;
-            buffer.fileStart = 0;
-            downloader.callback(buffer);
+            var response = req.response;
+            downloader.callback(response);
         } 
     };
 }
