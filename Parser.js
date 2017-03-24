@@ -10,11 +10,14 @@ function findBox(stream) {
 	}
 
 	var size = stream.readUint32();
-	var type = stream.readString(4);
+	var type = stream.readString(4).toLowerCase();
 
 	console.log(getDate() + "Found box of type " + type + " and size " + size);
 
 	if (type != "moof" && type != "traf") {
+	    if (type == "mdat") {
+	        console.log(getDate() + "content " + stream.readString(size - headerSize));
+	    }
 		// move to the end of box
 		stream.seek(contextPosition + size);
 	}
