@@ -1,5 +1,6 @@
 ﻿// header consists of size (4 bytes) and type (4 bytes)
 var headerSize = 8;
+var mdatContent = null;
 
 function findBox(stream) {
 	var contextPosition = stream.position;
@@ -12,11 +13,12 @@ function findBox(stream) {
 	var size = stream.readUint32();
 	var type = stream.readString(4).toLowerCase();
 
-	console.log(getDate() + "Found box of type " + type + " and size " + size);
+	logData("Found box of type " + type + " and size " + size);
 
 	if (type != "moof" && type != "traf") {
 	    if (type == "mdat") {
-	        console.log(getDate() + "content " + stream.readString(size - headerSize));
+	        mdatContent = stream.readString(size - headerSize);
+	        logData("content " + mdatContent);
 	    }
 		// move to the end of box
 		stream.seek(contextPosition + size);
@@ -41,14 +43,15 @@ function parse(stream) {
 
 		// end of stream reached
 		if (status == -1)
-			return;
+		    return mdatContent;
 	}
 }
 
 var Parser = function (arrayBuffer) {
 	// initialize object which manipulates with ArrayBuffer and pass it for parsing
 	var inputStream = new DataStream(arrayBuffer, 0, DataStream.BIG_ENDIAN);
-	parse(inputStream);
+	this.response = parse(inputStream);
+	
 }
 
 

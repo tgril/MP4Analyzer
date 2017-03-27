@@ -15,7 +15,7 @@ Downloader.prototype.download = function () {
     var req = new XMLHttpRequest();
     req.open("GET", this.url, true);
     req.responseType = "arraybuffer";
-    console.log(getDate() + "Loading " + this.url);
+    logData("Loading " + this.url);
     req.send();
 
     req.onreadystatechange = function (e) {

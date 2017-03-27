@@ -13,13 +13,23 @@
     <script src="Downloader.js"></script>
     <script src="Datastream.js"></script>
     <script src="Parser.js"></script>
+    <script src="ImageParser.js"></script>
     <script src="Analyzer.js"></script>
 </head>
 <body>
 
     <h3>MP4 File Analyzer</h3>
     <div>
-        <button id="AnalyzeButton" style="width: 100px;" onclick="analyze()">Analyze</button>
+        MP4 file URL:
+        <input id="inputUrl" style="width:500px" value="http://demo.castlabs.com/tmp/text0.mp4">
+        <button id="analyzeButton" onclick="analyze()">Analyze</button>
+    </div>
+
+    <textarea id="result" rows="20" cols="85" style="resize:none;" readonly></textarea>
+    
+    <div id="imagesHeader"><p>Images extracted from analyzed file:</p></div>
+    <div id="images">
+
     </div>
 
 </body>

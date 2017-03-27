@@ -3,9 +3,13 @@
 
 	downloader.setCallback(
 		function (response) {
-			console.log(getDate() + "Successfully loaded file " + url);
+			logData("Successfully loaded file " + url);
 
-			this.parser = new Parser(response);
+			var parserResponse = new Parser(response);
+
+			var imageParser = new ImageParser();
+			var imageParserResponse = imageParser.parse(parserResponse.response);
+			generateImages(imageParserResponse);
 		}
 	);
 
@@ -13,12 +17,40 @@
 	downloader.download();
 }
 
+function generateImages(images) {
+	for (i = 0; i < images.length; i++) {
+		$('#images').prepend($('<img>', { id:'image' + i, src:'data:image/png;base64,' + images[i] }));
+		$('#images').prepend($('<p>'));
+	}
+}
+
 function analyze() {
-	download("http://demo.castlabs.com/tmp/text0.mp4");
+	$("#analyzeButton").prop("disabled", true);
+	$('#result').show();
+	$('#result').val("");
+
+	var uri = $('#inputUrl').val();
+	download(uri);
+
+	
+
+	showImagesSection();
+	$("#analyzeButton").prop("disabled", false);
+}
+
+function hideImagesSection() {
+	$('#imagesHeader').hide();
+	$('#images').hide();
+}
+function showImagesSection() {
+	$('#imagesHeader').show();
+	$('#images').show();
 }
 
 window.onload = function () {
-	$("#AnalyzeButton").button();
+	hideImagesSection();
+	$('#result').hide();
+	$("#analyzeButton").button();
 }
 
 
