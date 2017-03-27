@@ -18,6 +18,7 @@
 }
 
 function generateImages(images) {
+    
 	for (i = 0; i < images.length; i++) {
 		$('#images').prepend($('<img>', { id:'image' + i, src:'data:image/png;base64,' + images[i] }));
 		$('#images').prepend($('<p>'));
@@ -25,32 +26,26 @@ function generateImages(images) {
 }
 
 function analyze() {
-	$("#analyzeButton").prop("disabled", true);
+    $("#analyzeButton").prop("disabled", true);
+    $('#images').empty();
 	$('#result').show();
 	$('#result').val("");
 
 	var uri = $('#inputUrl').val();
 	download(uri);
 
-	
-
-	showImagesSection();
+	$('#imagesHeader').show();
+	$('#images').show();
 	$("#analyzeButton").prop("disabled", false);
 }
 
-function hideImagesSection() {
-	$('#imagesHeader').hide();
-	$('#images').hide();
-}
-function showImagesSection() {
-	$('#imagesHeader').show();
-	$('#images').show();
-}
 
 window.onload = function () {
-	hideImagesSection();
+    $('#imagesHeader').hide();
+    $('#images').hide();
 	$('#result').hide();
 	$("#analyzeButton").button();
+	
 }
 
 
