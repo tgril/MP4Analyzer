@@ -55,7 +55,7 @@
                         // extract list of png images (smpte\\:image tag's data)
                         var imageListSource = imageExtractor.parse(mdatDataList[i]);
                         if (imageListSource == null || imageListSource.length == 0) {
-                            logData("No images found inside mdat box ");
+                            logData("No images found inside mdat box " + (i+1));
                         }
                         else {
                             generateImages(imageListSource);
