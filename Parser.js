@@ -39,7 +39,7 @@ function findBox(stream) {
 			// add box data (all except first 8 bytes) to list of mdat boxes
 			var mdatData = stream.readString(size - 8);
 			mdatDataList.push(mdatData);
-			logData("content " + mdatData);
+			logData("content " + mdatData.substring(0, 10000) + "...");
 		}
 		// move to the end of box
 		stream.seek(contextPosition + size);
