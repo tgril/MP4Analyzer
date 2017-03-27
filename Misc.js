@@ -4,6 +4,6 @@
 
 function logData(data) {
     console.log(getDate() + " " + data);
-    $('#result').val($('#result').val() + data + "\n");
+    $('#logBox').val($('#logBox').val() + data + "\n");
 }
 

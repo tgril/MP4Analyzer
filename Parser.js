@@ -1,6 +1,24 @@
-﻿// header consists of size (4 bytes) and type (4 bytes)
-var headerSize = 8;
-var mdatContent = null;
+﻿var mdatDataList = [];
+
+function Parser() {
+}
+
+Parser.prototype.parse = function (arrayBuffer) {
+	// initialize object which manipulates with ArrayBuffer and parse it
+	var stream = new DataStream(arrayBuffer, 0, DataStream.BIG_ENDIAN);
+	var status;
+
+	// clear list of mdat boxes
+	mdatDataList = [];
+
+	while (true) {
+		// parse through root boxes and recursively traverse all inner boxes
+		status = findBox(stream);
+	    // end of stream reached
+		if (status == -1)
+			return mdatDataList;
+	}
+}
 
 function findBox(stream) {
 	var contextPosition = stream.position;
@@ -14,45 +32,31 @@ function findBox(stream) {
 	var type = stream.readString(4).toLowerCase();
 
 	logData("Found box of type " + type + " and size " + size);
-
+	
+	// assumption is that only boxes of type moof and traf contain other boxes
 	if (type != "moof" && type != "traf") {
-	    if (type == "mdat") {
-	        mdatContent = stream.readString(size - headerSize);
-	        logData("content " + mdatContent);
-	    }
+		if (type == "mdat") {
+			// add box data (all except first 8 bytes) to list of mdat boxes
+			var mdatData = stream.readString(size - 8);
+			mdatDataList.push(mdatData);
+			logData("content " + mdatData);
+		}
 		// move to the end of box
 		stream.seek(contextPosition + size);
 	}
 	else {
-		var ret;
 		// recursively iterate through child boxes
 		while (stream.position < contextPosition + size) {
-			ret = findBox(stream);
+			findBox(stream);
 		}
 	}
 
 	return 1;
 }
 
-function parse(stream) {
-	var status;
 
-	while (true) {
-		// parse through root boxes and recursively traverse all inner boxes
-		status = findBox(stream);
 
-		// end of stream reached
-		if (status == -1)
-		    return mdatContent;
-	}
-}
 
-var Parser = function (arrayBuffer) {
-	// initialize object which manipulates with ArrayBuffer and pass it for parsing
-	var inputStream = new DataStream(arrayBuffer, 0, DataStream.BIG_ENDIAN);
-	this.response = parse(inputStream);
-	
-}
 
 
 
